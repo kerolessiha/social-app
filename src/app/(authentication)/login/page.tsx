@@ -9,7 +9,7 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
-
+// import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { handlelogin } from "@/lib/authSlice";
@@ -23,20 +23,27 @@ import Link from "next/link";
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch<dispatchType>();
-
+  // const [apiError, setApiError] = useState<string | null>(null);
   const { token, isloading } = useSelector((state: stateType) => state.auth);
 
+  // Formik validation schema
+  // const validationSchema = Yup.object({
+  //   email: Yup.string().email("Invalid email address").required("Email is required"),
+  //   password: Yup.string().required("Password is required"),
+  // });
+
+  // Initialize useFormik hook
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     onSubmit: (values: { email: string; password: string }) => {
-      dispatch(handlelogin(values))
+      dispatch(handlelogin(values)) // Dispatch the login action
         .then((res) => {
           if (res.payload.message === "success") {
             toast.success("Welcome back!");
-            router.push("/");
+            router.push("/"); // Redirect to home page on success
           } else {
             toast.error("Error: invalid email or password");
           }
@@ -71,6 +78,7 @@ export default function Login() {
             Login
           </Typography>
           <form onSubmit={formik.handleSubmit}>
+            {/* Email Field */}
             <Box sx={{ mb: 2 }}>
               <TextField
                 name="email"
@@ -85,6 +93,7 @@ export default function Login() {
               />
             </Box>
 
+            {/* Password Field */}
             <Box sx={{ mb: 2 }}>
               <TextField
                 name="password"
@@ -101,6 +110,14 @@ export default function Login() {
               />
             </Box>
 
+            {/* API Error Message
+            {apiError && (
+              <Typography color="error" variant="body2" align="center" gutterBottom>
+                {apiError}
+              </Typography>
+            )} */}
+
+            {/* Submit Button */}
             <Box sx={{ textAlign: "center", mt: 3 }}>
               <Button
                 type="submit"
@@ -113,6 +130,7 @@ export default function Login() {
             </Box>
           </form>
 
+          {/* Register link */}
           <Box sx={{ mt: 2, textAlign: "center" }}>
             <Typography variant="body2">
               Don't have an account?{" "}

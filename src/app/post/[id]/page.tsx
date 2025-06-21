@@ -1,28 +1,23 @@
 "use client";
-
 import { getSinglePost } from "@/lib/postsSlice";
 import { dispatchType, stateType } from "@/lib/store";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Posts from "@/app/posts/page";
 
-type PostPageProps = {
-  params: {
-    id: string;
-  };
-};
+export default function PostPage(props: { params: { id: string } }) {
+  let dispatch = useDispatch<dispatchType>();
 
-export default async function PostPage({ params }: PostPageProps) {
-  return <ClientPostPage id={params.id} />;
-}
-
-function ClientPostPage({ id }: { id: string }) {
-  const dispatch = useDispatch<dispatchType>();
-  const { singlePost } = useSelector((state: stateType) => state.post);
+  let { singlePost } = useSelector((state: stateType) => state.post);
 
   useEffect(() => {
-    dispatch(getSinglePost(id));
-  }, [dispatch, id]);
+    dispatch(getSinglePost(props.params.id));
+    // console.log("DEBUG postdata", singlePost)
+  }, []);
 
-  return <Posts postdata={singlePost} allComments={true} />;
+  return (
+    <>
+      <Posts postdata={singlePost} allComments={true} />
+    </>
+  );
 }
