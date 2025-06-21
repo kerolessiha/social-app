@@ -12,18 +12,17 @@ type PostPageProps = {
   };
 };
 
-export default function PostPage({ params }: PostPageProps) {
-  const dispatch = useDispatch<dispatchType>();
+export default async function PostPage({ params }: PostPageProps) {
+  return <ClientPostPage id={params.id} />;
+}
 
+function ClientPostPage({ id }: { id: string }) {
+  const dispatch = useDispatch<dispatchType>();
   const { singlePost } = useSelector((state: stateType) => state.post);
 
   useEffect(() => {
-    dispatch(getSinglePost(params.id));
-  }, [dispatch, params.id]);
+    dispatch(getSinglePost(id));
+  }, [dispatch, id]);
 
-  return (
-    <>
-      <Posts postdata={singlePost} allComments={true} />
-    </>
-  );
+  return <Posts postdata={singlePost} allComments={true} />;
 }
