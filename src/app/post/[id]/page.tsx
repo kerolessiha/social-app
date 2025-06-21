@@ -1,29 +1,29 @@
 "use client";
-import { getSinglePost } from '@/lib/postsSlice';
-import { dispatchType, stateType } from '@/lib/store';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Posts from '@/app/posts/page';
 
+import { getSinglePost } from "@/lib/postsSlice";
+import { dispatchType, stateType } from "@/lib/store";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Posts from "@/app/posts/page";
 
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
 
+export default function PostPage({ params }: PageProps) {
+  const dispatch = useDispatch<dispatchType>();
 
-export default function PostPage(props:{params:{id:string}}) {
+  const { singlePost } = useSelector((state: stateType) => state.post);
 
-  let dispatch = useDispatch<dispatchType>()
+  useEffect(() => {
+    dispatch(getSinglePost(params.id));
+  }, [dispatch, params.id]); // ✅ إضافة dependencies هنا كمان لتفادي تحذير React
 
-  let {singlePost} = useSelector((state:stateType)=>state.post)
-
-    useEffect(() => {
-
-    dispatch(getSinglePost(props.params.id))
-
-    }, [])
-
-
-  return<>
-  <Posts postdata = {singlePost} allComments={true}/>
-  
-  
-  </>
+  return (
+    <>
+      <Posts postdata={singlePost} allComments={true} />
+    </>
+  );
 }
